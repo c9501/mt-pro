@@ -13,15 +13,27 @@ module.exports = {
     'prettier/prettier': [
       'warn',
       {
-        useTabs: false, //使用tab缩进还是空格，选择false
-        tabWidth: 2, //当行是空格先的情况空几个空格 ，选择 2个
-        printWidth: 100, //当行字符长度，推荐是80，也有人喜欢100或120
-        singleQuote: true, //使用单引号还是双引号，选择true，单引号
-        trailingComma: 'none', //在多行输入的尾逗号是否添加，设置为none
-        semi: false //语句末尾是否要加分号，默认值true，选择fales表示不加
+        // useTabs：使⽤tab缩进还是空格缩进，选择false；
+        useTabs: false,
+        // tabWidth：tab是空格的情况下，是⼏个空格，选择2个
+        tabWidth: 2,
+        // printWidth：当⾏字符的⻓度，推荐80，也有⼈喜欢100或者120
+        printWidth: 100,
+        // singleQuote：使⽤单引号还是双引号，选择true，使⽤单引号；
+        singleQuote: true,
+        // trailingComma：在多⾏输⼊的尾逗号是否添加，设置为 `none`；
+        trailingComma: 'none',
+        // semi：语句末尾是否要加分号，默认值true，选择false表示不加；
+        semi: false
       }
     ],
-    'vue/no-setup-props-destructu': ['off']
+    'vue/multi-word-component-names': [
+      'warn',
+      {
+        ignores: ['index']
+      }
+    ],
+    'vue/no-setup-props-destructure': ['off']
   },
   parserOptions: {
     ecmaVersion: 'latest'

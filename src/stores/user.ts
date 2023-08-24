@@ -1,7 +1,7 @@
 import type { User } from '@/types/user'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-export const useUserStore = defineStore('cp-user', () => {
+export const useUserStore = defineStore('mt-user', () => {
   // ⽤户信息
   const user = ref<User>()
   // 设置⽤户，登录后使⽤
