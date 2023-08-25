@@ -11,5 +11,24 @@
   --mt-disable: #D9DBDE;
   --mt-line: #EDEDED;
   --mt-bg: #F6F7F9;
-  --mt-price: #EB5757 mt;
+  --mt-price: #EB5757;
+  --van-button-primary-background: var(--mt-primary);
+  --van-button-primary-border-color: var(--mt-primary);
+  --van-cell-vertical-padding: 14px;
+  --van-checkbox-size: 14px;
+  --van-button-normal-font-size: 16px;
+}
+
+body {
+  font-size: 14px;
+  color: var(--mt-text1);
+}
+
+a {
+  color: var(--mt-text2);
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, ol {
+  margin: 0;
+  padding: 0;
 }
