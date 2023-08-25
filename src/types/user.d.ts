@@ -1,13 +1,10 @@
 /* ⽤户信息 */
-export type User = {
-  /* token令牌 */
-  token: string
-  /* ⽤户ID */
-  id: string
-  /* ⽤户名称 */
-  account: string
-  /* ⼿机号 */
-  mobile: string
-  /* 头像 */
-  avatar: string
-}
+export type User =
+  | {
+      id: number | string
+      token: string
+      account: string
+      mobile: number | string
+      avatar: string
+    }
+  | undefined

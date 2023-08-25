@@ -1,4 +1,4 @@
-:root{
+:root {
   --mt-primary: #16C2A3;
   --mt-plain: #EAF8F6;
   --mt-orange: #FCA21C;
@@ -11,8 +11,5 @@
   --mt-disable: #D9DBDE;
   --mt-line: #EDEDED;
   --mt-bg: #F6F7F9;
-  --mt-price: #EB5757mt
-  // 覆盖vant的主题色
-  // --van-button-primary-background : var(--a);
-  // --van-button-primary-border-color : var(--a);
+  --mt-price: #EB5757 mt;
 }

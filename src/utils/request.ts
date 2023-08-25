@@ -1,10 +1,11 @@
 import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import { useUserStore } from '../stores/user'
 import axios, { type Method } from 'axios'
+import type { Data } from '../types/request'
 import { showToast } from 'vant'
 import router from '../router'
 const instance = axios.create({
-  baseURL: '',
+  baseURL: '/dev-api',
   timeout: 1000
 })
 // 请求拦截器
@@ -45,8 +46,8 @@ instance.interceptors.response.use(
   }
 )
 
-const request = (url: string, method: Method, submitData?: object) => {
-  return instance({
+const request = <T>(url: string, method: Method = 'get', submitData?: object) => {
+  return instance.request<T, Data<T>>({
     url,
     method,
     [method.toLowerCase() === 'get' ? 'params' : 'data']: submitData
