@@ -8,3 +8,10 @@ export type User =
       avatar: string
     }
   | undefined
+
+  /* 验证码 */
+export type Code =
+{
+    code: number | string
+  }
+

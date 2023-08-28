@@ -1,10 +1,9 @@
-import type { User } from '@/types/user'
+import type { User } from '@/types/user.d.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 export const useUserStore = defineStore(
   'mt-user',
   () => {
-    const aa = ref(11)
     // ⽤户信息
     const user = ref<User>()
     // 设置⽤户，登录后使⽤
@@ -15,7 +14,7 @@ export const useUserStore = defineStore(
     const delUser = () => {
       user.value = undefined
     }
-    return { user, setUser, delUser, aa }
+    return { user, setUser, delUser}
   },
   {
     persist: true
