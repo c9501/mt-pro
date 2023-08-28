@@ -31,8 +31,7 @@
         v-if="isPass"
       >
         <template #button>
-          <!-- <img src="../../icons/login/eye-off.svg" alt=""> -->
-          <mt-icons
+                <mt-icons
             :name="show ? 'login-eye-on' : 'login-eye-off'"
             @click="show = !show"
           ></mt-icons>
@@ -132,10 +131,8 @@ const loginHandle = async () => {
      //调用验证码接口
      const codeRes = await sendMobileCode(loginForm.value.mobile, 'login')
     //  console.log(codeRes)
-     await showToast('发送成功')
-     alert(codeRes.data?.code)
-
-
+    // showToast('发送成功')
+    alert(codeRes.data?.code)
     //倒计时
     time.value=60
     clearInterval(timer)
