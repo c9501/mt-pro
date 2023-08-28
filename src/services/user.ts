@@ -17,3 +17,10 @@ export const loginByMobile = (mobile: string, code: string) => {
 
 // 获取个⼈信息
 export const getUserInfo = () => request<UserInfo>('/patient/myUser')
+
+//刷新token
+export const tokenapi = () => {
+  return request('/login','GET',{headers:{
+    Authorization:'Bearer '+ localStorage.getItem('refreshToken')
+  }})
+}

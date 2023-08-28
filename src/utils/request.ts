@@ -4,9 +4,14 @@ import axios, { type Method } from 'axios'
 import type { Data } from '../types/request.d.ts'
 import { showToast } from 'vant'
 import router from '../router'
+import {tokenapi} from  "@/services/user"
 const instance = axios.create({
   baseURL: '/dev-api',
-  timeout: 1000
+  timeout: 1000,
+  //请求头
+  headers:{
+    Authorization:'Bearer ' + localStorage.getItem('token')
+  }
 })
 // 请求拦截器
 instance.interceptors.request.use(
@@ -24,7 +29,22 @@ instance.interceptors.request.use(
 )
 // 响应拦截器
 instance.interceptors.response.use(
-  (res: AxiosResponse) => {
+ async (res: AxiosResponse) => {
+    if(res.data.token){
+      const token = res.headers.Authorization.replace('Bearer ', '')
+      localStorage.setItem('token', token)
+      instance.defaults.headers.Authorization='Bearer ' + localStorage.getItem('token')
+    }
+    if(res.data.refreshToken){
+      const refreshToken=res.headers.refreshtoken.replace('Bearer ', '')
+      localStorage.setItem('refreshtoken',refreshToken)
+    }
+    if(res.data.code===401){
+      await tokenapi()
+      res.config.headers.Authorization='Bearer ' + localStorage.getItem('token')
+      const resp=await instance.request(res.config)
+      return resp
+    }
     if (res.data.code !== 10000) {
       // TODO toast
       showToast(res.data.message)
