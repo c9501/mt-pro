@@ -100,7 +100,7 @@ onMounted(async () => {
 const tools = [
   { label: '我的问诊', path: '/user' },
   { label: '我的处⽅', path: '/user' },
-  { label: '家庭档案', path: '/user' },
+  { label: '家庭档案', path: '/user/patient' },
   { label: '地址管理', path: '/user' },
   { label: '我的评价', path: '/user' },
   { label: '官⽅客服', path: '/user' },
@@ -195,7 +195,7 @@ const tools = [
     .van-col {
       text-align: center;
 
-      .mt-icons {
+      .mt-icon {
         font-size: 28px;
       }
 

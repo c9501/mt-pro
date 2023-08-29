@@ -30,15 +30,18 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
  async (res: AxiosResponse) => {
+  //短token
     if(res.data.token){
       const token = res.headers.Authorization.replace('Bearer ', '')
       localStorage.setItem('token', token)
       instance.defaults.headers.Authorization='Bearer ' + localStorage.getItem('token')
     }
+    //长token值
     if(res.data.refreshToken){
       const refreshToken=res.headers.refreshtoken.replace('Bearer ', '')
       localStorage.setItem('refreshtoken',refreshToken)
     }
+    //过期处理
     if(res.data.code===401){
       await tokenapi()
       res.config.headers.Authorization='Bearer ' + localStorage.getItem('token')
