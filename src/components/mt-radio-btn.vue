@@ -10,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+//子传父数据类型定义
 defineProps<{
   options: {
     label: string
@@ -17,7 +18,7 @@ defineProps<{
   }[]
   modelValue?: string | number
 }>()
-
+//父传子ts
 const emits = defineEmits<{
   (e: 'update:modelValue', value: string | number): void
 }>()

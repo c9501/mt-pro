@@ -35,13 +35,7 @@ const router = createRouter({
         },
         { path: '/user',
         component: () => import('@/views/User/index.vue'),
-        meta: {title: '个人信息' },
-        children: [
-          { path: '/consult',
-           component: () => import('@/views/Consult/index.vue') ,
-           meta: {title: '消息通知' }
-        },
-        ]
+        meta: {title: '个人信息' }
         }
       ]
     }

@@ -1,12 +1,6 @@
 <template>
   <div class="layout-page">
     <RouterView />
-    <!-- <van-tabbar route>
-  <van-tabbar-item icon="home-o" to="/home">⾸⻚</van-tabbar-item>
-  <van-tabbar-item icon="search" to="/article">健康百科</van-tabbar-item>
-  <van-tabbar-item icon="friends-o" to="/notify">消息中⼼</van-tabbar-item>
-  <van-tabbar-item icon="setting-o" to="/user">我的</van-tabbar-item>
-</van-tabbar> -->
     <van-tabbar route>
       <van-tabbar-item to="/home">⾸⻚
         <template #icon="{ active }">

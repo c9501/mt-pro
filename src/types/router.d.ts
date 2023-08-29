@@ -1,3 +1,4 @@
+// 路由元信息
 import 'vue-router'
 declare module 'vue-router' {
   // 扩展 元信息类型

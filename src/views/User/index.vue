@@ -74,19 +74,20 @@ import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 const store = useUserStore()
 const router = useRouter()
+//退出登录
 const logout = async () => {
   showConfirmDialog({
-  title: '温馨提示',
-  message:
-    '您确认要退出优医问诊吗？',
-})
-  .then(() => {
-    store.delUser()
-  router.push('/login')
+    title: '温馨提示',
+    message:
+      '您确认要退出优医问诊吗？',
   })
-  .catch(() => {
-    // on cancel
-  });
+    .then(() => {
+      store.delUser()
+      router.push('/login')
+    })
+    .catch(() => {
+      // on cancel
+    });
 
 }
 const user = ref<UserInfo>()
@@ -97,6 +98,7 @@ onMounted(async () => {
   // console.log(user.value);
 
 })
+//定义cell数据
 const tools = [
   { label: '我的问诊', path: '/user' },
   { label: '我的处⽅', path: '/user' },
