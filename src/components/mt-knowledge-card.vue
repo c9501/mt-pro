@@ -1,44 +1,35 @@
 <template>
   <div class="knowledge-card van-hairline--bottom">
     <div class="head">
-      <van-image round class="avatar"
-        src="https://yanxuan-item.nosdn.127.net/9ad83e8d9670b10a19b30596327cfd14.png"></van-image>
+      <van-image round class="avatar" :src="item.creatorAvatar"></van-image>
       <div class="info">
-        <p class="name">张医⽣</p>
-        <p class="dep van-ellipsis">积⽔潭医院 ⻣科 主任医师</p>
+        <p class="name">{{ item.creatorName }}</p>
+        <p class="dep van-ellipsis"> {{ item.creatorHospatalName }} {{ item.creatorDep }} {{ item.creatorTitles }}</p>
       </div>
-      <van-button class="btn" size="small" round>+ 关注</van-button>
+      <van-button class="btn" size="small" round> {{ item.likeFlag === 1 ? '已关注' : '+ 关注' }}</van-button>
     </div>
     <div class="body">
-      <h3 class="title van-ellipsis">⾼⾎压是⽬前世界上最常⻅，发病率最⾼的慢性病之⼀</h3>
+      <h3 class="title van-ellipsis">{{ item.title }}</h3>
       <p class="tag">
-        <span># 肥胖</span>
-        <span># 养⽣</span>
+        <span v-for="(tag, i) in item.topics" :key="i"># {{ tag }}</span>
       </p>
       <p class="intro van-multi-ellipsis--l2">
-        据估计，全世界有 10
-        亿⼈患有⾼⾎压，来⾃美国全国健康和营养调查的数据（NHANES）显示，⾼⾎压的患病率呈逐年上升趋
-        势。
-        但是，我国⾼⾎压的控制程度⾮常不乐观，不少朋友担⼼降压药对肾的影响，有些甚⾄因为担⼼伤肾，⽽
-        不敢吃降压药。
-        我们就介绍⼀下，⾼⾎压对肾脏的危害，还有降压药对肾脏影响。
-        没有耐⼼看的朋友，可以直接记住这个结论：⾼⾎压⽐降压药伤肾。千万不要因为担⼼副作⽤不敢吃药，
-        那是「丢⻄⽠捡芝麻」得不偿失的⾏为
+        {{ item.content.replace(/<[^>]+>/g, '') }}
       </p>
-      <div class="imgs">
-        <van-image src="https://yanxuan-item.nosdn.127.net/c1cdf62c5908659a9e4c8c2f9df218fd.png" />
-        <van-image src="https://yanxuan-item.nosdn.127.net/c1cdf62c5908659a9e4c8c2f9df218fd.png" />
-        <van-image src="https://yanxuan-item.nosdn.127.net/c1cdf62c5908659a9e4c8c2f9df218fd.png" />
+      <div class="imgs" :class="{ large: item.coverUrl.length === 1 }">
+        <van-image fit="cover" v-for="(url, i) in item.coverUrl" :key="i" :src="url" />
       </div>
       <p class="logs">
-        <span>10 收藏</span>
-        <span>50 评论</span>
+        <span>{{ item.collectionNumber }} 收藏</span>
+        <span>{{ item.commentNumber }} 评论</span>
       </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { Knowledge } from '@/types/home-knowledge-type'
+defineProps<{ item: Knowledge }>()
 </script>
 <style lang="scss" scoped>
 .knowledge-card {
@@ -59,19 +50,19 @@
       padding-right: 10px;
 
       .name {
-        color: var(--cp-text2);
+        color: var(--mt-text2);
       }
 
       .dep {
-        color: var(--cp-tip);
+        color: var(--mt-tip);
         font-size: 12px;
       }
     }
 
     .btn {
       padding: 0 12px;
-      border-color: var(--cp-primary);
-      color: var(--cp-primary);
+      border-color: var(--mt-primary);
+      color: var(--mt-primary);
       height: 28px;
       width: 72px;
     }
@@ -88,7 +79,7 @@
       margin-top: 6px;
 
       >span {
-        color: var(--cp-primary);
+        color: var(--mt-primary);
         margin-right: 20px;
         font-size: 12px;
       }
@@ -97,7 +88,7 @@
     .intro {
       margin-top: 7px;
       line-height: 2;
-      color: var(--cp-text3);
+      color: var(--mt-text3);
     }
 
     .imgs {
@@ -128,7 +119,7 @@
       margin-top: 10px;
 
       >span {
-        color: var(--cp-tip);
+        color: var(--mt-tip);
         margin-right: 16px;
         font-size: 12px;
       }

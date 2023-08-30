@@ -71,16 +71,19 @@
       </van-swipe>
     </div>
     <van-tabs shrink sticky v-model:active="active">
-      <van-tab title="关注" name="like"><mt-knowledge-list /></van-tab>
-      <van-tab title="推荐" name="recommend"><mt-knowledge-list /></van-tab>
-      <van-tab title="减脂" name="fatReduction"><mt-knowledge-list /></van-tab>
-      <van-tab title="饮食" name="food"><mt-knowledge-list /></van-tab>
+      <van-tab title="关注" name="like">
+        <FollowDoctor></FollowDoctor>
+        <mt-knowledge-list type="like" /></van-tab>
+      <van-tab title="推荐" name="recommend"><mt-knowledge-list type="recommend" /></van-tab>
+      <van-tab title="减脂" name="fatReduction"><mt-knowledge-list type="fatReduction"/></van-tab>
+      <van-tab title="饮食" name="food"><mt-knowledge-list type="food" /></van-tab>
     </van-tabs>
 
   </div>
 </template>
 
 <script setup lang="ts">
+import FollowDoctor from './components/FollowDoctor.vue'
 import { ref } from 'vue'
 import type { KnowledgeType } from '@/types/consult'
 const active = ref<KnowledgeType>('recommend')
