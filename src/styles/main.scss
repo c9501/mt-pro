@@ -48,3 +48,7 @@ h1,h2,h3,h4,h5,h6,p,ul,ol {
     padding: 0 15px;
   }
 }
+//进度条#nprogress .bar {
+  #nprogress .bar {
+    background-color: var(--mt-primary) !important;
+    }

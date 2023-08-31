@@ -4,27 +4,31 @@
     <p class="name">{{ item.name }}</p>
     <p class="van-ellipsis">{{ item.hospitalName }} {{ item.depName }}</p>
     <p>{{ item.positionalTitles }}</p>
-    <van-button round size="small" @click="follow(item)" type="primary">{{ item.likeFlag === 1 ? '已关注' : '+ 关注' }}</van-button>
+    <van-button round size="small" :loading="loading" @click="follow(item)" type="primary">{{ item.likeFlag === 1 ? '已关注' : '+ 关注' }}</van-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Doctor } from '@/types/consult'
-import { followDoctor } from "@/services/consult"
-import { ref } from "vue"
+// import { followDoctor } from "@/services/consult"
+// import { ref } from "vue"
+import { useFollow } from '@/composable'
 defineProps<{ item: Doctor }>()
 
-const loading = ref(false)
-const follow = async (doc: Doctor) => {
-  loading.value = true
-  try {
-    await followDoctor(doc.id)
-    doc.likeFlag = doc.likeFlag === 1 ? 0 : 1
-  } finally {
-    loading.value = false
-  }
+const { loading, follow } = useFollow()
 
-}
+
+// const loading = ref(false)
+// const follow = async (doc: Doctor) => {
+//   loading.value = true
+//   try {
+//     await followDoctor(doc.id)
+//     doc.likeFlag = doc.likeFlag === 1 ? 0 : 1
+//   } finally {
+//     loading.value = false
+//   }
+
+// }
 
 </script>
 <style lang="scss" scoped>

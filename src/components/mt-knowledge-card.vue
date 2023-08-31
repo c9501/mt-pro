@@ -6,7 +6,7 @@
         <p class="name">{{ item.creatorName }}</p>
         <p class="dep van-ellipsis"> {{ item.creatorHospatalName }} {{ item.creatorDep }} {{ item.creatorTitles }}</p>
       </div>
-      <van-button class="btn" size="small" round> {{ item.likeFlag === 1 ? '已关注' : '+ 关注' }}</van-button>
+      <van-button class="btn" :loading="loading" @click="follow(item)" size="small" round> {{ item.likeFlag === 1 ? '已关注' : '+ 关注' }}</van-button>
     </div>
     <div class="body">
       <h3 class="title van-ellipsis">{{ item.title }}</h3>
@@ -30,6 +30,8 @@
 <script setup lang="ts">
 import type { Knowledge } from '@/types/home-knowledge-type'
 defineProps<{ item: Knowledge }>()
+ import { useFollow } from '@/composable'
+const { loading, follow } = useFollow('knowledge')
 </script>
 <style lang="scss" scoped>
 .knowledge-card {
