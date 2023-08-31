@@ -18,10 +18,20 @@ const router = createRouter({
       meta: { title: '家庭档案' }
     },
    {
-    path: '/consult/fast',
-      component: () => import('@/views/consult/fast.vue'),
-      meta: { title: '家庭档案' }
+    path: '/consult/dep',
+      component: () => import('@/views/Consult/dep.vue'),
+      meta: { title: '选择科室' }
    },
+   {
+    path: '/consult/fast',
+      component: () => import('@/views/Consult/fast.vue'),
+      meta: { title: '急速问诊' }
+   },
+   {
+    path: '/consult/illness',
+    component: () => import('@/views/Consult/illness.vue'),
+    meta: { title: '病情描述' }
+    },
     {
       path: '/',
       component: () => import('@/views/Layout/index.vue'),
@@ -64,7 +74,7 @@ router.beforeEach((to) => {
 })
 router.afterEach((to) => {
   // 修改标题
-document.title = `149优医问诊-${to.meta.title || ''}`
+document.title = `优医问诊-${to.meta.title || ''}`
   NProgress.done()
   })
   NProgress.configure({
