@@ -25,23 +25,21 @@
     <div class="illness-img">
       <van-uploader :after-read="onAfterRead" @delete="onDeleteImg" v-model="fileList" max-count="9"
         :max-size="5 * 1024 * 1024" upload-icon="photo-o" upload-text="上传图⽚">
-
-
       </van-uploader>
       <p class="tip">上传内容仅医⽣可⻅,最多9张图,最⼤5MB</p>
     </div>
-    <van-button :class={disabled} @click="next" type="primary" block round>下⼀步</van-button>
+    <van-button :class={disabled:disabled} @click="next" type="primary" block round>下⼀步</van-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { UploaderAfterRead, UploaderFileListItem } from 'vant/lib/uploader/types'
-import type { ConsultIllness } from '@/types/consult'
-import { computed, ref } from 'vue'
+import type { ConsultIllness,Image } from '@/types/consult'
+import { computed, ref, onMounted } from 'vue'
 import { IllnessTime } from '@/enums'
 import { uploadImage } from '@/services/consult'
 import { useRouter } from 'vue-router'
-import { showToast } from 'vant';
+import { showConfirmDialog, showToast } from 'vant';
 import { userConsultStore } from '@/stores/consult'
 const timeOptions = [
   { label: '⼀周内', value: IllnessTime.Week },
@@ -59,7 +57,7 @@ const form = ref<ConsultIllness>({
   consultFlag: undefined,
   pictures: []
 })
-const fileList = ref([])
+const fileList = ref<Image[]>([])
 const onAfterRead: UploaderAfterRead = (item) => {
   // TODO 上传图⽚
   if (Array.isArray(item)) return
@@ -99,6 +97,26 @@ const next = () => {
   // 跳转档案管理，需要根据 isChange 实现选择功能
   router.push('/user/patient?isChange=1')
 }
+
+// 回显数据
+onMounted(() => {
+  if (store.consult.illnessDesc) {
+    showConfirmDialog({
+      title: '温馨提示',
+      message: '是否恢复您之前填写的病情信息呢？',
+      confirmButtonColor: 'var(--mt-primary)',
+      closeOnPopstate: false
+    })
+    .then(() => {
+      // 确认
+      const { illnessDesc, illnessTime, consultFlag, pictures } = store.consult
+      form.value = { illnessDesc, illnessTime, consultFlag, pictures }
+      // 图⽚回显
+      fileList.value = pictures || []
+    })
+  }
+})
+
 </script>
 <style lang="scss" scoped>
 .consult-illness-page {

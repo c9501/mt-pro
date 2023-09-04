@@ -1,8 +1,14 @@
 <template>
   <div class="patient-page">
-    <mt-nav-bar title="家庭档案"></mt-nav-bar>
+    <mt-nav-bar :title="isChange ? '选择患者' : '家庭档案'"></mt-nav-bar>
+    <!-- 头部提示 -->
+    <div class="patient-change" v-if="isChange">
+      <h3>请选择患者信息</h3>
+      <p>以便医⽣给出更准确的治疗，信息仅医⽣可⻅</p>
+    </div>
     <div class="patient-page-list">
-      <div class="patient-item" v-for="(item, index) in list" :key="index">
+      <div class="patient-item" v-for="(item, index) in list" :key="index" @click="selectedPatient(item)"
+        :class="{ selected: patientId === item.id }">
         <div class="info">
           <span class="name">{{ item.name }}</span>
           <!-- 身份证脱敏处理   /^(.{6})(?:\d+)(.{4})$/ -->
@@ -46,6 +52,10 @@
         <van-action-bar-button @click="remove" v-if="patient.id">删除</van-action-bar-button>
       </van-action-bar>
     </van-popup>
+    <!-- 底部按钮 -->
+    <div class="patient-next" v-if="isChange">
+      <van-button type="primary" @click="next" round block>下⼀步</van-button>
+    </div>
   </div>
 </template>
 
@@ -69,14 +79,18 @@
 // endregion
 
 
-
+import { useRoute,useRouter} from 'vue-router'
 import { getPatientList, addPatient, editPatient, delPatient } from '@/services/patient'
 import type { PatientList, Patient } from '@/types/user'
+import { userConsultStore } from '@/stores/consult'
 import { ref, computed } from 'vue'
 import { showToast } from 'vant'
 import Validator from 'id-validator'   //身份证要验证引入
 import { showConfirmDialog } from 'vant'
-
+const route = useRoute()
+const router = useRouter()
+const store = userConsultStore()
+const isChange = computed(() => route.query.isChange === '1')
 // 创建一个变量,保存患者列表
 const list = ref<PatientList>([])
 
@@ -84,6 +98,12 @@ const list = ref<PatientList>([])
 const initPatientList = async () => {
   const patienRes = await getPatientList()
   list.value = patienRes.data
+  // 设置默认选中的ID，当你是选择患者的时候，且有患者信息的时候
+  if (isChange.value && list.value.length) {
+    const defPatient = list.value.find((item) => item.defaultFlag === 1)
+    if (defPatient) patientId.value = defPatient.id
+    else patientId.value = list.value[0].id
+  }
 }
 initPatientList()
 
@@ -173,9 +193,18 @@ const remove = async () => {
     showToast('删除成功')
   }
 }
+const patientId = ref<string>()
+const selectedPatient = (item: Patient) => {
+  if (isChange.value) {
+    patientId.value = item.id
+  }
+}
 
-
-
+const next = async () => {
+if (!patientId.value) return showToast('请选就诊择患者')
+store.setPatient(patientId.value)
+router.push('/consult/pay')
+}
 </script>
 <style lang="scss" scoped>
 .patient-page {
@@ -193,7 +222,10 @@ const remove = async () => {
       overflow: hidden;
       position: relative;
       margin-bottom: 15px;
-
+      &.selected {
+        border-color: var(--mt-primary);
+        background-color: var(--mt-plain);
+      }
       .info {
         display: flex;
         flex: 1;
@@ -285,5 +317,29 @@ const remove = async () => {
       }
     }
   }
+}
+
+.patient-change {
+  padding: 15px;
+
+  >h3 {
+    font-weight: normal;
+    margin-bottom: 5px;
+  }
+
+  >p {
+    color: var(--mt-text3);
+  }
+}
+
+.patient-next {
+  padding: 15px;
+  background-color: #fff;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+  box-sizing: border-box;
 }
 </style>

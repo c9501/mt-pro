@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { CodeTypeRules } from './types/user.d'
-import type { User ,Code,UserInfo,PatientList } from '@/types/user.d'
+import type { User ,Code,UserInfo,PatientList, Patient } from '@/types/user.d'
 // 密码登录
 export const loginByPassword = (mobile: string, password: string) => {
   return request<User>('/login/password', 'POST',{ mobile, password})
@@ -26,3 +26,5 @@ export const tokenapi = () => {
 }
 //获取家庭档案信息
 export const getPatientList = () => request<PatientList>('/patient/mylist')
+// 查询患者详情
+export const getPatientDetail = (id: string) => request<Patient>(`/patient/info/${id}`)
