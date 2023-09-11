@@ -1,5 +1,5 @@
 import type { KnowledgePage, KnowledgeParams } from "@/types/home-knowledge-type"
-import type { DoctorPage, PageParams, FollowType, Image, TopDep, ConsultOrderPreParams, ConsultOrderPreData, PartialConsult, ConsultOrderPage, ConsultOrderListParams } from '@/types/consult'
+import type { DoctorPage, PageParams, FollowType, Image, TopDep, ConsultOrderPreParams, ConsultOrderPreData, PartialConsult, ConsultOrderPage, ConsultOrderListParams, ConsultOrderItem } from '@/types/consult'
 import request from "@/utils/request";
 //首页推荐数据
 export const getKnowledgePage = (params: KnowledgeParams) =>
@@ -46,4 +46,14 @@ export const cancelOrder = (id: string | number) => {
 // 删除订单
 export const deleteOrder = (id: string | number) => {
   return request(`/patient/order/${id}`, 'DELETE')
+}
+
+// 查看处方
+export const getPrescriptionPic = (id: string | number) => {
+  return request<{ id: string; url: string }>(`patient/consult/prescription/${id}`, 'GET')
+}
+
+// 查看订单详情
+export const getOrderDetail = (orderId: string) => {
+  return request<ConsultOrderItem>('/patient/consult/order/detail', 'GET', { orderId })
 }

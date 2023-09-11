@@ -120,6 +120,11 @@ export type ConsultOrderPage = {
   rows: ConsultOrderItem[]
 }
 export type ConsultOrderItem = {
+  evaluateId: number
+  actualPayment: number
+  pointDeduction: number
+  // 优惠卷
+  couponDeduction: number
   /**
    * 开药门诊必有-过敏史0无1有2不清楚
    */

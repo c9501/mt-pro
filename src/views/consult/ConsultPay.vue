@@ -10,6 +10,7 @@ import { useRouter, onBeforeRouteLeave } from 'vue-router'
 const router = useRouter()
 const store = userConsultStore()
 const payInfo = ref<ConsultOrderPreData>()
+//获取订单信息
 const loadData = async () => {
   const res = await getConsultOrderPre({
     type: store.consult.type,
@@ -74,16 +75,16 @@ const onClose = () => {
     })
 }
 //跳转支付
-const pay = async () => {
-  if (paymentMethod.value === undefined) return showToast('请选择支付方式')
-  showLoadingToast('跳转支付')
-  const res = await getConsultOrderUrl({
-    orderId: orderId.value,
-    paymentMethod: paymentMethod.value,
-    payCallback: 'http://localhost:5173/#/room'
-  })
-  window.location.href = res.data.payUrl
-}
+// const pay = async () => {
+//   if (paymentMethod.value === undefined) return showToast('请选择支付方式')
+//   showLoadingToast('跳转支付')
+//   const res = await getConsultOrderUrl({
+//     orderId: orderId.value,
+//     paymentMethod: paymentMethod.value,
+//     payCallback: 'http://localhost:5173/#/room'
+//   })
+//   window.location.href = res.data.payUrl
+// }
 //页面刷新
 onMounted(() => {
   if (
@@ -131,7 +132,7 @@ onMounted(() => {
     <van-submit-bar button-type="primary" @click="submit" :price="payInfo.actualPayment * 100" button-text="⽴即⽀付"
       :loading="loading" text-align="left" />
     <!-- 弹框 -->
-    <van-action-sheet v-model:show="show"
+    <!-- <van-action-sheet v-model:show="show"
     @close="onClose"
     title="选择支付方式" :close-on-popstate="false" :closeable="false">
       <div class="pay-type">
@@ -153,8 +154,9 @@ onMounted(() => {
         </div>
       </div>
 
-    </van-action-sheet>
-
+    </van-action-sheet> -->
+    <mt-pay-sheet payCallback="room" v-model:show="show" :actualPayment="payInfo?.actualPayment!" :onClose="onClose"
+      :orderId="orderId"></mt-pay-sheet>
   </div>
   <div v-else class="consult-pay-page">
     <van-skeleton title :row="3" />

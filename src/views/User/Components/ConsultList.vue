@@ -2,7 +2,7 @@
 import ConsultItem from './ConsultItem.vue'
 import { getConsultOrderList } from '@/services/consult'
 import {ConsultType} from "@/enums/index"
-import type { ConsultOrderItem, ConsultOrderListParams, ConsultOrderPage } from '@/types/consult'
+import type { ConsultOrderItem, ConsultOrderListParams } from '@/types/consult'
 import { ref } from 'vue'
 
 const props = defineProps<{
@@ -30,7 +30,7 @@ const onLoad = async () => {
   }
   loading.value = false
 }
-
+//删除
 const handleDeleteOrder = (id: string | number) => {
   orderList.value = orderList.value.filter((item) => item.id !== id)
 }

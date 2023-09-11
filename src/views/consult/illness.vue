@@ -157,7 +157,7 @@ onMounted(() => {
         display: flex;
         align-items: center;
 
-        .cp-icon {
+        .mt-icon {
           font-size: 12px;
           margin-right: 2px;
         }

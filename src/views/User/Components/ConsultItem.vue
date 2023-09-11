@@ -4,6 +4,8 @@ import { OrderType } from '@/enums'
 import { ref, computed } from 'vue'
 import { cancelOrder, deleteOrder } from '@/services/consult'
 import { showToast } from 'vant'
+import ConsultMore from "./ConsultMore.vue"
+import useShowPrescription, { useDeleteOrder } from '@/composable'
 const props = defineProps<{
   item: ConsultOrderItem
 }>()
@@ -26,47 +28,55 @@ const emits = defineEmits<{
 //   const data = orderStatusList.find((item) => item.type === status)
 //   return data?.value
 // }
-
-const showPopover = ref(false)
-const actions = computed(() => [
-  { text: '查看处方', disabled: !props.item.prescriptionId },
-  { text: '删除订单' }
-])
-const onSelect = (item: { text: string; disabled?: boolean }) => {
-  console.log('item=>', item)
-}
-
+//弹框开关
+// const showPopover = ref(false)
+// const actions = computed(() => [
+//   { text: '查看处方', disabled: !props.item.prescriptionId },
+//   { text: '删除订单' }
+// ])
+// const onSelect = (it: { text: string; disabled?: boolean }) => {
+//   if (it.text === '查看处方') {
+//     showPrescription(props.item.prescriptionId as number | string)
+//   }  else if (it.text === '删除订单') { handleDeleteOrder(props.item) }
+// }
+import { useCancelOrder } from '@/composable'
+const { loading, cancelConsultOrder } = useCancelOrder()
 // 取消问诊
-const loading = ref(false)
-const handleCancelOrder = async (item: ConsultOrderItem) => {
-  loading.value = true
+// const loading = ref(false)
+// const handleCancelOrder = async (item: ConsultOrderItem) => {
+//   loading.value = true
 
-  try {
-    await cancelOrder(item.id)
-    // item.status = OrderType.ConsultCancel
-    item.statusValue = '已取消'
-    showToast('取消成功')
-  } catch (error) {
-    showToast('取消失败')
-  } finally {
-    loading.value = false
-  }
-}
+//   try {
+//     await cancelOrder(item.id)
+//     item.status = OrderType.ConsultCancel
+//     item.statusValue = '已取消'
+//     showToast('取消成功')
+//   } catch (error) {
+//     showToast('取消失败')
+//   } finally {
+//     loading.value = false
+//   }
+// }
 
 // 删除订单
-const deleteLoading = ref(false)
-const handleDeleteOrder = async (item: ConsultOrderItem) => {
-  deleteLoading.value = true
-  try {
-    await deleteOrder(item.id)
-    emits('on-delete', item.id)
-    showToast('删除成功')
-  } catch (error) {
-    showToast('删除失败')
-  } finally {
-    deleteLoading.value = false
-  }
-}
+// const deleteLoading = ref(false)
+// const handleDeleteOrder = async (item: ConsultOrderItem) => {
+//   deleteLoading.value = true
+//   try {
+//     await deleteOrder(item.id)
+//     emits('on-delete', item.id)
+//     showToast('删除成功')
+//   } catch (error) {
+//     showToast('删除失败')
+//   } finally {
+//     deleteLoading.value = false
+//   }
+// }
+const {  handleDeleteOrder } = useDeleteOrder((id) => {
+  emits('on-delete', id)
+})
+// 查看处方
+const { showPrescription } = useShowPrescription()
 </script>
 
 <template>
@@ -76,7 +86,7 @@ const handleDeleteOrder = async (item: ConsultOrderItem) => {
       <p>{{ item.docInfo?.name || '极速问诊（自动分配医生）' }}</p>
       <span>{{ item.statusValue }}</span>
     </div>
-    <div class="body">
+    <div class="body" @click="$router.push(`/user/consult/${item.id}`)">
       <div class="body-row">
         <div class="body-label">病情描述</div>
         <div class="body-value">{{ item.illnessDesc }}</div>
@@ -91,21 +101,19 @@ const handleDeleteOrder = async (item: ConsultOrderItem) => {
       </div>
     </div>
     <div class="foot" v-if="item.status === OrderType.ConsultPay">
-      <van-button class="gray" plain size="small" round @click="handleCancelOrder(item)"
-        >取消问诊</van-button
-      >
-      <van-button type="primary" plain size="small" round>去支付</van-button>
+      <van-button type="default" round :loading="loading"  size="small"
+@click="cancelConsultOrder(item!)">取消问诊</van-button>
+      <van-button type="primary" plain size="small" round
+      @click="$router.push(`/user/consult/${item.id}`)">去支付</van-button>
     </div>
     <div class="foot" v-else-if="item.status === OrderType.ConsultWait">
-      <van-button class="gray" plain size="small" round @click="handleCancelOrder(item)"
-        >取消问诊</van-button
-      >
-      <van-button type="primary" plain size="small" round :to="`/room?orderId=${item.id}`"
-        >继续沟通</van-button
-      >
+      <van-button type="default" round :loading="loading"  size="small"
+@click="cancelConsultOrder(item!)">取消问诊</van-button>
+      <van-button type="primary" plain size="small" round :to="`/room?orderId=${item.id}`">继续沟通</van-button>
     </div>
     <div class="foot" v-if="item.status === OrderType.ConsultChat">
-      <van-button v-if="item.prescriptionId" class="gray" plain size="small" round>
+      <van-button v-if="item.prescriptionId" class="gray" plain size="small" round
+        @click="showPrescription(item.prescriptionId)">
         查看处方
       </van-button>
       <van-button type="primary" plain size="small" round :to="`/room?orderId=${item.id}`">
@@ -114,14 +122,15 @@ const handleDeleteOrder = async (item: ConsultOrderItem) => {
     </div>
     <div class="foot" v-if="item.status === OrderType.ConsultComplete">
       <div class="more">
-        <van-popover
-          placement="top-start"
-          v-model:show="showPopover"
-          :actions="actions"
-          @select="onSelect"
-        >
+        <!-- 气泡弹框 -->
+        <!-- <van-popover placement="top-start" v-model:show="showPopover" :actions="actions" @select="onSelect">
           <template #reference> 更多 </template>
-        </van-popover>
+        </van-popover> -->
+        <ConsultMore
+        :disabled="!item.prescriptionId"
+        @onDelete="handleDeleteOrder(item)"
+        @onPreview="showPrescription(item.prescriptionId!)"
+      ></ConsultMore>
       </div>
       <van-button class="gray" plain size="small" round :to="`/room?orderId=${item.id}`">
         问诊记录
@@ -132,9 +141,7 @@ const handleDeleteOrder = async (item: ConsultOrderItem) => {
       <van-button v-else class="gray" plain size="small" round> 查看评价 </van-button>
     </div>
     <div class="foot" v-if="item.status === OrderType.ConsultCancel">
-      <van-button class="gray" plain size="small" round @click="handleDeleteOrder(item)"
-        >删除订单</van-button
-      >
+      <van-button class="gray" plain size="small" round @click="handleDeleteOrder(item)">删除订单</van-button>
       <van-button type="primary" plain size="small" round to="/">咨询其他医生</van-button>
     </div>
   </div>

@@ -55,11 +55,11 @@ const { loading, follow } = useFollow()
   >p {
     margin-bottom: 0;
     font-size: 11px;
-    color: var(--cp-tip);
+    color: var(--mt-tip);
 
     &.name {
       font-size: 13px;
-      color: var(--cp-text1);
+      color: var(--mt-text1);
       margin-bottom: 5px;
     }
   }
